@@ -5,6 +5,7 @@
 #include <unistd.h>
 #include <arpa/inet.h>
 #include <math.h>
+#include <time.h>
 
 #define PLAYER_HEIGHT 1.8f  // Camera/player height
 #define MOVE_SPEED 5.0f     // Movement speed
@@ -52,6 +53,14 @@ int main() {
     camera.up = (Vector3){ 0.0f, 1.0f, 0.0f };
     camera.fovy = 60.0f;
     camera.projection = CAMERA_PERSPECTIVE;
+
+    // Variables to track frequency and data rate
+    int frameCount = 0;
+    double lastTime = GetTime();
+    int dataSent = 0;
+    int dataReceived = 0;
+    float frequency = 0.0f;
+    float avgBitsPerSecond = 0.0f;
 
     while (!WindowShouldClose()) {
         float deltaTime = GetFrameTime();
@@ -125,13 +134,29 @@ int main() {
         // Send position to server
         char buffer[BUFFER_SIZE];
         snprintf(buffer, BUFFER_SIZE, "%f %f %f", player.position.x, player.position.y, player.position.z);
-        send(clientSocket, buffer, strlen(buffer), 0);
+        int bytesSent = send(clientSocket, buffer, strlen(buffer), 0);
+        if (bytesSent > 0) {
+            dataSent += bytesSent;
+        }
 
         // Receive position update from server
         ssize_t bytesRead = recv(clientSocket, buffer, BUFFER_SIZE - 1, 0);
         if (bytesRead > 0) {
             buffer[bytesRead] = '\0';
             sscanf(buffer, "%f %f %f", &player.position.x, &player.position.y, &player.position.z);
+            dataReceived += bytesRead;
+            frameCount++;
+        }
+
+        // Calculate frequency and average bits per second every second
+        double currentTime = GetTime();
+        if (currentTime - lastTime >= 1.0) {
+            frequency = (float)frameCount / (currentTime - lastTime);
+            avgBitsPerSecond = ((dataSent + dataReceived) * 8.0f) / (currentTime - lastTime);
+            frameCount = 0;
+            dataSent = 0;
+            dataReceived = 0;
+            lastTime = currentTime;
         }
 
         // Render frame
@@ -143,6 +168,8 @@ int main() {
         EndMode3D();
 
         DrawText("Move with WASD, look with arrow keys, jump with SPACE", 10, 10, 20, RAYWHITE);
+        DrawText(TextFormat("Frequency: %.2f Hz", frequency), 10, 40, 20, RAYWHITE);
+        DrawText(TextFormat("Avg bits/s: %.2f", avgBitsPerSecond), 10, 70, 20, RAYWHITE);
         EndDrawing();
     }
 
