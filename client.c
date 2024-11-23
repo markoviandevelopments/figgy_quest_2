@@ -93,6 +93,10 @@ int main() {
             moveDirection.x += cos(DEG2RAD * player.yaw) * MOVE_SPEED * deltaTime;
             moveDirection.z += sin(DEG2RAD * player.yaw) * MOVE_SPEED * deltaTime;
         }
+        if (IsKeyDown(KEY_E)) {
+            moveDirection.x += 3.0f * cos(DEG2RAD * player.yaw) * MOVE_SPEED * deltaTime;
+            moveDirection.z += 3.0f * sin(DEG2RAD * player.yaw) * MOVE_SPEED * deltaTime;
+        }
         if (IsKeyDown(KEY_S)) {
             moveDirection.x -= cos(DEG2RAD * player.yaw) * MOVE_SPEED * deltaTime;
             moveDirection.z -= sin(DEG2RAD * player.yaw) * MOVE_SPEED * deltaTime;
