@@ -87,7 +87,6 @@ int main() {
         int clientSocket = accept(serverSocket, (struct sockaddr *)&clientAddress, &clientLen);
         if (clientSocket < 0) {
             perror("Accept failed");
-            free(clientSocket);
             continue;
         }
 
