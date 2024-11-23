@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Define the port to clear
-PORT=12345
+PORT=12346
 
 echo "Attempting to clear port $PORT..."
 

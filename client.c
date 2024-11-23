@@ -7,7 +7,6 @@
 #include <math.h>
 #include <time.h>
 
-#define PLAYER_HEIGHT 1.8f  // Camera/player height
 #define MOVE_SPEED 5.0f     // Movement speed
 #define TURN_SPEED 90.0f    // Turn speed in degrees per second
 #define GRAVITY -9.8f       // Gravity
@@ -19,6 +18,12 @@ typedef struct {
     float yaw;    // Horizontal angle
     float pitch;  // Vertical angle
 } Player;
+
+typedef struct {
+    Vector3 position;
+} OtherPlayer;
+
+int player_id;
 
 int main() {
     int clientSocket = socket(AF_INET, SOCK_STREAM, 0);
@@ -42,7 +47,7 @@ int main() {
 
     // Initialize player
     Player player = { .position = { 0.0f, PLAYER_HEIGHT, 0.0f }, .velocityY = 0.0f, .isGrounded = false, .yaw = 0.0f, .pitch = 0.0f };
-
+    OtherPlayer other_player = { .position = {0.0f, PLAYER_HEIGHT, 0.0f}};
     InitWindow(800, 600, "Chessboard POV");
     SetTargetFPS(60);
 
@@ -143,11 +148,11 @@ int main() {
         ssize_t bytesRead = recv(clientSocket, buffer, BUFFER_SIZE - 1, 0);
         if (bytesRead > 0) {
             buffer[bytesRead] = '\0';
-            sscanf(buffer, "%f %f %f", &player.position.x, &player.position.y, &player.position.z);
+            sscanf(buffer, "%d %f %f %f %f %f %f", &player_id, &player.position.x, &player.position.y, &player.position.z, &other_player.position.x, &other_player.position.y, &other_player.position.z);
             dataReceived += bytesRead;
             frameCount++;
         }
-
+        printf("%s\n", buffer);
         // Calculate frequency and average bits per second every second
         double currentTime = GetTime();
         if (currentTime - lastTime >= 1.0) {
@@ -161,15 +166,17 @@ int main() {
 
         // Render frame
         BeginDrawing();
-        ClearBackground(BLACK);
+        ClearBackground((Color) {100, 0, 0, 100});
 
         BeginMode3D(camera);
         DrawChessboard(BOARD_SIZE, SQUARE_SIZE);
+        DrawPlayers(player_id, player.position.x, player.position.y, player.position.z, other_player.position.x, other_player.position.y, other_player.position.z);
         EndMode3D();
 
         DrawText("Move with WASD, look with arrow keys, jump with SPACE", 10, 10, 20, RAYWHITE);
         DrawText(TextFormat("Frequency: %.2f Hz", frequency), 10, 40, 20, RAYWHITE);
         DrawText(TextFormat("Avg bits/s: %.2f", avgBitsPerSecond), 10, 70, 20, RAYWHITE);
+        DrawText(TextFormat("X: %.2f  Y: %.2f  Z: %.2f", player.position.x, player.position.y, player.position.z), 10, 100, 20, RAYWHITE);
         EndDrawing();
     }
 

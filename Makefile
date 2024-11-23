@@ -5,7 +5,7 @@ LDFLAGS = -lraylib -lm -pthread
 
 # Source files
 SERVER_SRC = server.c
-CLIENT_SRC = client.c draw_chessboard.c
+CLIENT_SRC = client.c draw_chessboard.c draw_players.c
 COMMON_HEADER = game.h
 
 # Output binaries
