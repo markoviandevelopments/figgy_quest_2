@@ -178,6 +178,7 @@ int main() {
         DrawText(TextFormat("Frequency: %.2f Hz", frequency), 10, 40, 20, RAYWHITE);
         DrawText(TextFormat("Avg bits/s: %.2f", avgBitsPerSecond), 10, 70, 20, RAYWHITE);
         DrawText(TextFormat("X: %.2f  Y: %.2f  Z: %.2f", player.position.x, player.position.y, player.position.z), 10, 100, 20, RAYWHITE);
+        DrawText(TextFormat("Session Time: %.2f", GetTime()), 10, 130, 20, RAYWHITE);
         EndDrawing();
     }
 
