@@ -8,7 +8,7 @@
 #include <time.h>
 
 #define MOVE_SPEED 5.0f     // Movement speed
-#define TURN_SPEED 90.0f    // Turn speed in degrees per second
+#define TURN_SPEED 170.0f    // Turn speed in degrees per second
 #define GRAVITY -9.8f       // Gravity
 
 typedef struct {
