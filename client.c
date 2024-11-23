@@ -166,9 +166,16 @@ int main() {
 
         // Render frame
         BeginDrawing();
-        ClearBackground((Color) {100, 0, 0, 100});
+
+        ClearBackground((Color){0, 0, 0, 255});
+
+        Color topColor = (Color){135, 206, 250, 255};    // Light blue (sky)
+        Color bottomColor = (Color){25, 25, 112, 255};   // Dark blue (near horizon)
+        DrawRectangleGradientV(0, 0, GetScreenWidth(), GetScreenHeight(), topColor, bottomColor);
+
 
         BeginMode3D(camera);
+
         DrawChessboard(BOARD_SIZE, SQUARE_SIZE);
         DrawPlayers(player_id, player.position.x, player.position.y, player.position.z, other_player.position.x, other_player.position.y, other_player.position.z);
         DrawThing();
