@@ -2,6 +2,7 @@
 #define GAME_H
 
 #include "raylib.h"
+#include <math.h>
 
 // Constants
 #define BOARD_SIZE 8
