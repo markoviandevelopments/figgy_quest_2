@@ -14,5 +14,6 @@
 // Function prototypes
 void DrawChessboard(int boardSize, float squareSize);
 void DrawPlayers(int id, float x, float y, float z, float x1, float y1, float z1);
+void DrawThing();
 
 #endif

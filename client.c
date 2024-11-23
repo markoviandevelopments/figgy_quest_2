@@ -171,6 +171,7 @@ int main() {
         BeginMode3D(camera);
         DrawChessboard(BOARD_SIZE, SQUARE_SIZE);
         DrawPlayers(player_id, player.position.x, player.position.y, player.position.z, other_player.position.x, other_player.position.y, other_player.position.z);
+        DrawThing();
         EndMode3D();
 
         DrawText("Move with WASD, look with arrow keys, jump with SPACE", 10, 10, 20, RAYWHITE);
