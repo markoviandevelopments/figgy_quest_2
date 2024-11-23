@@ -1,2 +1,2 @@
 #!/bin/bash
-git add -A; git commit -m "m"; git push
+make clean; git add -A; git commit -m "m"; git push; make
